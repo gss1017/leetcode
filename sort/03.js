@@ -37,41 +37,89 @@ function swap(arr, i , j) {
 *
 * */
 
-function quickSort(arr, start, end) {
-    if (start >= end) { // 基线条件（终止条件）
-        return;
+// function quickSort(arr, start, end) {
+//     if (start >= end) { // 基线条件（终止条件）
+//         return;
+//     }
+//     let left = start;
+//     let right = end;
+//     let baseIndex = left; // 基准值索引
+//     while(left < right) {
+//         while(arr[right] >= arr[baseIndex] && left < right) {
+//             right --;
+//         }
+//
+//         if (baseIndex < right) {
+//             swap(arr, baseIndex, right);
+//             baseIndex = right;
+//             left ++;
+//         }
+//
+//         while(arr[left] <= arr[baseIndex] && left < right) {
+//             left ++;
+//         }
+//
+//         if (baseIndex > left) {
+//             swap(arr, baseIndex, left);
+//             baseIndex = left;
+//             right --;
+//         }
+//     }
+//
+//     quickSort(arr, start, baseIndex - 1);
+//     quickSort(arr, baseIndex + 1, end);
+//
+//     return arr;
+// }
+//
+//
+//
+// console.log(quickSort(arr, 0, arr.length -1));
+
+// 快速排序去除递归
+// 模拟栈
+
+function quickSort(arr) {
+    const stack = [[0, arr.length - 1]];
+    while (stack.length) { // 调用栈为空，循环终止
+        const [start, end] = stack.pop();
+
+        if (start >= end) { // 基线条件（终止条件）
+            return;
+        }
+        let left = start;
+        let right = end;
+        let baseIndex = left; // 基准值索引
+        // 递归条件 (持续条件)
+        while(left < right) {
+            while(arr[right] >= arr[baseIndex] && left < right) {
+                right --;
+            }
+
+            if (baseIndex < right) {
+                swap(arr, baseIndex, right);
+                baseIndex = right;
+                left ++;
+            }
+
+            while(arr[left] <= arr[baseIndex] && left < right) {
+                left ++;
+            }
+
+            if (baseIndex > left) {
+                swap(arr, baseIndex, left);
+                baseIndex = left;
+                right --;
+            }
+        }
+
+        if (start < (baseIndex - 1)) stack.push([start, baseIndex - 1]);
+        if (end > (baseIndex + 1)) stack.push([baseIndex + 1, end]);
     }
-    let left = start;
-    let right = end;
-    let baseIndex = left; // 基准值索引
-    while(left < right) {
-        while(arr[right] >= arr[baseIndex] && left < right) {
-            right --;
-        }
-
-        if (baseIndex < right) {
-            swap(arr, baseIndex, right);
-            baseIndex = right;
-        }
-
-        while(arr[left] <= arr[baseIndex] && left < right) {
-            left ++;
-        }
-
-        if (baseIndex > left) {
-            swap(arr, baseIndex, left);
-            baseIndex = left;
-        }
-    }
-
-    quickSort(arr, start, baseIndex - 1);
-    quickSort(arr, baseIndex + 1, end);
 
     return arr;
 }
 
 
 
-console.log(quickSort(arr, 0, arr.length -1));
-
-//
+console.log(quickSort(arr));
